@@ -17,6 +17,8 @@
   font-variant-numeric: tabular-nums;
 }
 .tiraMeio { background: var(--limao); }
+/* Nome de cidade com hífen não quebra no meio */
+.junto { white-space: nowrap; }
 
 .tira strong { display: block; max-width: 18ch; font-size: var(--step-lead); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
 
@@ -24,18 +26,34 @@
   display: grid;
   gap: 10px;
   font-size: var(--step-head);
-  hyphens: auto;
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 0.9;
 }
-.grande span { max-width: 24ch; font-size: var(--step-small); font-weight: 400; letter-spacing: 0; line-height: 1.4; }
+/* Sem hífen no meio da palavra: a legenda quebra só entre palavras */
+.grande span { max-width: 24ch; font-size: var(--step-small); font-weight: 400; letter-spacing: 0; line-height: 1.4; hyphens: manual; }
 
 .horas { display: flex; gap: 24px; font-size: var(--step-body); }
 .horas dt { font-size: var(--step-small); color: var(--tinta-suave); }
 .horas dd { font-weight: 600; }
 
+/* No celular cada quadro fica compacto: o lugar em cima, a altura do sol à esquerda,
+   o nascer e o pôr à direita. Os três cabem quase numa tela só. */
 @media (max-width: 900px) {
-  .tiras { grid-template-columns: 1fr; }
-  .tira { min-height: 0; }
+  .tiras { grid-template-columns: 1fr; gap: 6px; }
+  .tira {
+    min-height: 0;
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'titulo titulo' 'valor horas';
+    align-items: end;
+    gap: 14px 20px;
+  }
+  .tira strong { grid-area: titulo; max-width: none; font-size: var(--step-body); }
+  .grande { grid-area: valor; gap: 6px; }
+  .grande span { max-width: 26ch; }
+  .tiraMeio .grande { grid-column: 1 / -1; }
+  .horas { grid-area: horas; flex-direction: column; gap: 8px; text-align: right; }
+  .horas div { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
 }

@@ -59,7 +59,7 @@ export function TirasDoSol() {
         const d = c.l ? destaque(c.l) : null
         return (
           <li key={c.nome} className={s.tira}>
-            <strong>{c.nome}, em {c.local.nome}</strong>
+            <strong>{c.nome}, em <span className={s.junto}>{c.local.nome}</span></strong>
             {c.l && d ? (
               <>
                 <p className={s.grande}>{d.valor}<span>{d.legenda}, às {c.l.agora}</span></p>
@@ -75,7 +75,7 @@ export function TirasDoSol() {
         )
       })}
       <li className={`${s.tira} ${s.tiraMeio}`}>
-        <strong>Meio-dia solar de hoje, em Pindaré-Mirim</strong>
+        <strong>Meio-dia solar de hoje, em <span className={s.junto}>Pindaré-Mirim</span></strong>
         <p className={s.grande}>{pindare ? pindare.meio : '11h50'}<span>o sol fica quase a pino, a 3,7° do Equador</span></p>
       </li>
     </ul>

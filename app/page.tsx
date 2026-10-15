@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { BarraPastas } from '@/components/BarraPastas'
 import { Entradas } from '@/components/Entradas'
 import { Linha, type Momento } from '@/components/Linha'
 import { Numeros, type Numero } from '@/components/Numeros'
@@ -98,6 +99,7 @@ export default function Pagina() {
   return (
     <>
       <Entradas />
+      <BarraPastas />
 
       {/* Primeira tela: o logo e a pilha de pastas de projeto */}
       <header className={s.capa} id="inicio">

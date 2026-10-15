@@ -1,0 +1,55 @@
+/* Só no celular: no desktop as pastas da capa e as faixas das usinas já fazem esse papel */
+.barra { display: none; }
+
+@media (max-width: 760px) {
+  .barra {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: 56px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 0 0 0 12px;
+    background: var(--papel);
+    box-shadow: 0 6px 16px -10px rgba(16, 19, 42, 0.35);
+    transform: translateY(-100%);
+    transition: transform 280ms var(--ease-out);
+  }
+  .barra[data-visivel='sim'] { transform: none; }
+
+  .marca { align-self: center; flex: none; display: flex; padding: 6px 4px; }
+  .logo { width: auto; height: 26px; }
+
+  /* As abas, no mesmo recorte das pastas da capa; rolam de lado se não couberem */
+  .abas {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 0 12px 0 4px;
+    scrollbar-width: none;
+  }
+  .abas::-webkit-scrollbar { display: none; }
+
+  .abas a {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 18px;
+    white-space: nowrap;
+    font-size: var(--step-small);
+    font-weight: 500;
+    background: var(--papel-2);
+    color: var(--tinta);
+    clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+    transition: background-color 200ms, color 200ms, height 200ms var(--ease-out);
+  }
+  .abas a[data-ativa='sim'] { height: 44px; background: var(--cor); color: var(--tinta-aba); }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+  .barra { transition: none; }
+}
