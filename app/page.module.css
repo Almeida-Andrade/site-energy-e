@@ -30,7 +30,7 @@
 .topo a:hover { background: var(--chao); color: var(--marinho); }
 
 .titulo { margin-top: clamp(16px, 4vh, 48px); }
-.logo { width: min(640px, 86vw); height: auto; }
+.logo { width: min(480px, 86vw); height: auto; }
 
 .apoio {
   margin-top: 24px;
@@ -41,35 +41,34 @@
   text-wrap: balance;
 }
 
-/* A pilha invertida: a pasta aberta (Canis 5, com o botão) fica em cima, e as outras pendem
-   por baixo dela com a aba virada para baixo, na ordem da página. */
+/* A pilha de pastas, com as abas para cima. De cima para baixo, na ordem da página: a Canis 5
+   (aberta, com a foto e o botão), depois Em números, As usinas, A obra e O sol agora. Cada pasta de baixo
+   fica na frente da de cima. Da aberta só aparece uma faixa contida: a pilha inteira cabe na primeira tela. */
 .pastas {
   --passo: 48px;
   --aba-h: 40px;
-  --aberta: 70svh;
+  --aberta: clamp(200px, 28svh, 320px);
   position: relative;
   width: min(100%, 1240px);
-  margin-top: 48px;
-  height: calc(var(--aba-h) + var(--aberta) + 4 * var(--passo) + var(--aba-h));
+  margin-top: 32px;
+  height: calc(var(--aba-h) + var(--aberta) + 4 * var(--passo));
 }
 
 .pasta {
   position: absolute;
   inset-inline: 0;
-  top: var(--aba-h);
-  height: calc(var(--aberta) + (var(--i) + 1) * var(--passo));
-  z-index: calc(9 - var(--i));
+  top: calc(var(--aba-h) + var(--aberta) + (var(--i) - 1) * var(--passo));
+  bottom: 0;
   background: var(--cor);
   color: var(--tinta-pasta);
-  border-radius: 0 0 var(--raio) 0;
+  border-radius: 0 var(--raio) 0 0;
   transition: transform 0.25s var(--ease-out);
 }
-a.pasta:hover { transform: translateY(8px); }
+a.pasta:hover { transform: translateY(-6px); }
 
-/* Nas pastas de baixo a aba sai pela borda de baixo, como uma pasta virada */
 .aba {
   position: absolute;
-  bottom: calc(-1 * var(--aba-h));
+  top: calc(-1 * var(--aba-h));
   left: var(--aba);
   height: var(--aba-h);
   padding: 0 32px;
@@ -80,35 +79,23 @@ a.pasta:hover { transform: translateY(8px); }
   font-size: var(--step-body);
   font-weight: 500;
   white-space: nowrap;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 16px 100%);
+  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
 }
 
 .junto { white-space: nowrap; }
 
-/* A aberta é a de cima: aba para cima, à direita, e altura própria */
-.pastaAberta .aba {
-  top: calc(-1 * var(--aba-h));
-  bottom: auto;
-  left: auto;
-  right: 0;
-  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
-}
-
 .pastaAberta {
   --cor: var(--marinho);
   --tinta-pasta: var(--papel);
-  height: var(--aberta);
-  z-index: 10;
-  border-radius: 0 0 var(--raio) var(--raio);
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  top: var(--aba-h);
 }
+.pastaAberta .aba { left: auto; right: 0; }
 
 .botao {
-  position: relative;
+  position: absolute;
   z-index: 1;
+  left: 24px;
+  top: 24px;
   display: inline-flex;
   align-items: center;
   min-height: 52px;
@@ -124,8 +111,8 @@ a.pasta:hover { transform: translateY(8px); }
 
 .capaFoto {
   object-fit: cover;
-  top: 116px !important;
-  height: calc(100% - 116px) !important;
+  top: 0 !important;
+  height: var(--aberta) !important;
   animation: assenta 1.6s var(--ease-out) both;
 }
 @keyframes assenta { from { transform: scale(1.08); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
@@ -368,11 +355,9 @@ a.pasta:hover { transform: translateY(8px); }
   .topo { justify-content: space-between; margin-inline: -14px; width: calc(100% + 28px); }
   .titulo { margin-top: 40px; }
   .apoio { font-size: var(--step-body); }
-  .pastas { --passo: 44px; --aba-h: 32px; --aberta: 64svh; width: 100%; margin-top: 40px; }
+  .pastas { --passo: 46px; --aba-h: 32px; --aberta: clamp(170px, 26svh, 240px); width: 100%; margin-top: 32px; }
   .aba { font-size: var(--step-small); padding: 0 22px; }
-  .pastaAberta { padding: 20px; }
-  .botao { width: 100%; justify-content: center; }
-  .capaFoto { top: 92px !important; height: calc(100% - 92px) !important; }
+  .botao { left: 16px; top: 16px; }
 
   .intro { padding: 96px var(--margem); }
   .introTexto, .introFoto { grid-column: 1 / -1; }

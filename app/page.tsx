@@ -32,8 +32,7 @@ const FOTOS = {
 
 const NUMEROS_COM_FOTO: Numero[] = NUMEROS.map((n) => ({ ...n, ...FOTOS[n.foto] }))
 
-// Pastas da primeira tela, penduradas sob a pasta aberta e na ordem da página:
-// a primeira logo abaixo da aberta, a última no fundo. Cada uma leva à sua seção.
+// Pastas da primeira tela, abaixo da pasta aberta da Canis 5 e na ordem da página. Cada uma leva à sua seção.
 const PASTAS = [
   { rotulo: 'Em números', href: '#numeros', cor: 'var(--verde)', tinta: 'var(--tinta)', aba: '8%' },
   { rotulo: 'As usinas', href: '#usinas', cor: 'var(--ciano)', tinta: 'var(--tinta)', aba: '26%' },
@@ -117,18 +116,19 @@ export default function Pagina() {
         </p>
 
         <nav className={s.pastas} aria-label="Seções">
+          {/* A primeira pasta, a de trás: a Canis 5 aberta, com a foto e o botão */}
+          <div className={`${s.pasta} ${s.pastaAberta}`}>
+            <span className={s.aba}>Canis 5, Santa Inês</span>
+            <Image src={canis5DeCima} alt="A usina Canis 5 vista de cima, com as fileiras de painéis na diagonal"
+              fill priority sizes="92vw" className={s.capaFoto} />
+            <a href="#usinas" className={s.botao}>Conhecer as usinas</a>
+          </div>
           {PASTAS.map((p, i) => (
             <a key={p.href} href={p.href} className={s.pasta}
-              style={{ '--cor': p.cor, '--tinta-pasta': p.tinta, '--aba': p.aba, '--i': i } as React.CSSProperties}>
+              style={{ '--cor': p.cor, '--tinta-pasta': p.tinta, '--aba': p.aba, '--i': i + 1 } as React.CSSProperties}>
               <span className={s.aba}>{p.rotulo}</span>
             </a>
           ))}
-          <div className={`${s.pasta} ${s.pastaAberta}`}>
-            <span className={s.aba}>Canis 5, Santa Inês</span>
-            <a href="#usinas" className={s.botao}>Conhecer as usinas</a>
-            <Image src={canis5DeCima} alt="A usina Canis 5 vista de cima, com as fileiras de painéis na diagonal"
-              fill priority sizes="92vw" className={s.capaFoto} />
-          </div>
         </nav>
       </header>
 
