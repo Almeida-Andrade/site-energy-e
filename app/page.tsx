@@ -133,7 +133,7 @@ export default function Pagina() {
 
       <main>
         {/* Apresentação: o texto e os fatos de um lado, a foto do outro */}
-        <section className={s.intro} aria-labelledby="titulo-intro">
+        <section id="sobre" className={s.intro} aria-labelledby="titulo-intro">
           <div className={s.introTexto}>
             <h2 id="titulo-intro" className={s.introTitulo} data-entra>Sol que vira energia</h2>
             <p className={s.introNota} data-entra style={ordem(1)}>

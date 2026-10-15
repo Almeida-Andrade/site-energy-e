@@ -5,11 +5,13 @@ import { useEffect, useRef, useState } from 'react'
 import logo from '@/public/marca/energy-e.png'
 import s from './BarraPastas.module.css'
 
-// No celular, as pastas da primeira tela saem de vista logo no começo. Esta barra entra no lugar delas:
-// aparece quando a capa sai da tela, com as mesmas abas coloridas, e marca a seção em que o leitor está.
+// Só no celular. Quando as pastas da capa saem de vista, entra este topo fixo:
+// o logo, uma aba que diz em que seção o leitor está (sempre à vista) e o Menu,
+// que abre as seções como uma pilha de pastas nas cores da capa.
 const SECOES = [
-  { id: 'numeros', rotulo: 'Números', cor: 'var(--verde)', tinta: 'var(--tinta)' },
-  { id: 'usinas', rotulo: 'Usinas', cor: 'var(--ciano)', tinta: 'var(--tinta)' },
+  { id: 'sobre', rotulo: 'A Energy-E', cor: 'var(--papel-2)', tinta: 'var(--tinta)' },
+  { id: 'numeros', rotulo: 'Em números', cor: 'var(--verde)', tinta: 'var(--tinta)' },
+  { id: 'usinas', rotulo: 'As usinas', cor: 'var(--ciano)', tinta: 'var(--tinta)' },
   { id: 'obra', rotulo: 'A obra', cor: 'var(--limao)', tinta: 'var(--tinta)' },
   { id: 'sol', rotulo: 'O sol agora', cor: 'var(--noite)', tinta: 'var(--papel)' },
   { id: 'contato', rotulo: 'Contato', cor: 'var(--marinho)', tinta: 'var(--papel)' },
@@ -18,53 +20,68 @@ const SECOES = [
 export function BarraPastas() {
   const [visivel, setVisivel] = useState(false)
   const [ativa, setAtiva] = useState<string | null>(null)
-  const abas = useRef<HTMLUListElement>(null)
+  const menu = useRef<HTMLDetailsElement>(null)
 
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) return
-    const capa = document.getElementById('inicio')
-    const obsCapa = new IntersectionObserver(([e]) => setVisivel(!e.isIntersecting), { threshold: 0 })
-    if (capa) obsCapa.observe(capa)
-
-    const obsSecao = new IntersectionObserver(
-      (entradas) => {
-        for (const e of entradas) if (e.isIntersecting) setAtiva(e.target.id)
-      },
-      { rootMargin: '-50% 0px -50% 0px' },
-    )
-    SECOES.forEach((sec) => {
-      const el = document.getElementById(sec.id)
-      if (el) obsSecao.observe(el)
-    })
+    // A seção atual é a última cujo topo já passou de 35% da altura da tela, medida a cada rolagem:
+    // nada de faixa no meio da tela que deixa buracos entre uma seção e outra.
+    let quadro = 0
+    const mede = () => {
+      quadro = 0
+      const capa = document.getElementById('inicio')
+      setVisivel(capa ? capa.getBoundingClientRect().bottom < 0 : true)
+      const linha = innerHeight * 0.35
+      let atual: string | null = null
+      for (const sec of SECOES) {
+        const el = document.getElementById(sec.id)
+        if (el && el.getBoundingClientRect().top <= linha) atual = sec.id
+      }
+      setAtiva(atual)
+    }
+    const agenda = () => { if (!quadro) quadro = requestAnimationFrame(mede) }
+    mede()
+    addEventListener('scroll', agenda, { passive: true })
+    addEventListener('resize', agenda)
+    const fechaComEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') menu.current?.removeAttribute('open') }
+    addEventListener('keydown', fechaComEsc)
     return () => {
-      obsCapa.disconnect()
-      obsSecao.disconnect()
+      removeEventListener('scroll', agenda)
+      removeEventListener('resize', agenda)
+      removeEventListener('keydown', fechaComEsc)
+      cancelAnimationFrame(quadro)
     }
   }, [])
 
-  // A aba ativa rola para dentro da barra, sem mexer na página
-  useEffect(() => {
-    const lista = abas.current
-    const aba = lista?.querySelector<HTMLElement>(`[data-id="${ativa}"]`)
-    if (lista && aba) lista.scrollTo({ left: aba.offsetLeft - 8, behavior: 'smooth' })
-  }, [ativa])
+  // Se a barra some (voltou para a capa), o menu fecha junto
+  useEffect(() => { if (!visivel) menu.current?.removeAttribute('open') }, [visivel])
+
+  const atual = SECOES.find((sec) => sec.id === ativa) ?? SECOES[0]
 
   return (
-    <nav className={s.barra} data-visivel={visivel ? 'sim' : 'nao'} aria-label="Seções" aria-hidden={!visivel}>
-      <a href="#inicio" className={s.marca} aria-label="Energy-E, voltar ao início" tabIndex={visivel ? 0 : -1}>
+    <div className={s.barra} data-visivel={visivel ? 'sim' : 'nao'} inert={!visivel}>
+      <a href="#inicio" className={s.marca} aria-label="Energy-E, voltar ao início">
         <Image src={logo} alt="" sizes="96px" className={s.logo} />
       </a>
-      <ul ref={abas} className={s.abas}>
-        {SECOES.map((sec) => (
-          <li key={sec.id}>
-            <a href={`#${sec.id}`} data-id={sec.id} data-ativa={ativa === sec.id ? 'sim' : 'nao'} tabIndex={visivel ? 0 : -1}
-              aria-current={ativa === sec.id ? 'location' : undefined}
-              style={{ '--cor': sec.cor, '--tinta-aba': sec.tinta } as React.CSSProperties}>
-              {sec.rotulo}
+
+      {/* A aba da seção atual, na cor da pasta dela */}
+      <p className={s.atual} aria-live="polite" style={{ '--cor': atual.cor, '--tinta-aba': atual.tinta } as React.CSSProperties}>
+        <span className="sr-only">Você está em: </span>
+        {atual.rotulo}
+      </p>
+
+      <details ref={menu} className={s.menu}>
+        <summary className={s.menuBotao}>Menu</summary>
+        <nav aria-label="Seções" className={s.pilha}>
+          {SECOES.map((sec, i) => (
+            <a key={sec.id} href={`#${sec.id}`} onClick={() => menu.current?.removeAttribute('open')}
+              aria-current={sec.id === atual.id ? 'location' : undefined}
+              style={{ '--cor': sec.cor, '--tinta-aba': sec.tinta, '--i': i } as React.CSSProperties}>
+              <span>{sec.rotulo}</span>
+              {sec.id === atual.id && <small>você está aqui</small>}
             </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+          ))}
+        </nav>
+      </details>
+    </div>
   )
 }

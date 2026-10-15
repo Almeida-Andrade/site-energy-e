@@ -346,7 +346,7 @@ a.pasta:hover { transform: translateY(-8px); }
 
 @media (max-width: 760px) {
   /* A barra de pastas fixa (56px) não cobre o começo da seção ao tocar numa aba */
-  .secaoNumeros, .usinas, .obra, .sol, .verso { scroll-margin-top: 56px; }
+  .intro, .secaoNumeros, .usinas, .obra, .sol, .verso { scroll-margin-top: 64px; }
   .capa { padding-top: 8px; }
   .topo { justify-content: space-between; margin-inline: -14px; width: calc(100% + 28px); }
   .titulo { margin-top: 40px; }
