@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { USINAS } from '@/lib/dados'
+import { CONJUNTOS } from '@/lib/dados'
 import { alturaDoSol, diaSolar } from '@/lib/sol'
 import s from './Sol.module.css'
 
@@ -35,15 +35,12 @@ function ler(agora: Date, lat: number, lon: number): Leitura {
   }
 }
 
-function frase(l: Leitura) {
-  if (l.altura > 0.5) return `Sol a ${Math.round(l.altura)}° do horizonte`
-  if (l.altura > -6) return 'Crepúsculo, o sol está no horizonte'
-  return 'Noite: o sol está abaixo do horizonte'
+// O número grande do quadro: a altura do sol, ou o que acontece quando ele não está no céu.
+function destaque(l: Leitura) {
+  if (l.altura > 0.5) return { valor: `${Math.round(l.altura)}°`, legenda: 'de altura do sol sobre o horizonte' }
+  if (l.altura > -6) return { valor: 'Crepúsculo', legenda: 'o sol está na linha do horizonte' }
+  return { valor: 'Noite', legenda: 'o sol está abaixo do horizonte' }
 }
-
-// Inclinações fixas: duas ou três tiras tortas, como papel solto.
-const GIRO = [0, -1.4, 0, 1.2, 0, -0.8]
-const ALTURA = [38, 30, 44, 34, 40, 27]
 
 export function TirasDoSol() {
   const [agora, setAgora] = useState<Date | null>(null)
@@ -53,53 +50,33 @@ export function TirasDoSol() {
     return () => clearInterval(id)
   }, [])
 
-  const tiras = USINAS.map((u) => ({ titulo: u.nome, local: u.local.nome, l: agora ? ler(agora, u.local.lat, u.local.lon) : null }))
-  const pindare = agora ? ler(agora, USINAS[0].local.lat, USINAS[0].local.lon) : null
+  const leituras = CONJUNTOS.map((c) => ({ ...c, l: agora ? ler(agora, c.local.lat, c.local.lon) : null }))
+  const pindare = leituras[0].l
 
   return (
-    <ul className={s.tiras} aria-label="O sol agora sobre cada usina">
-      {tiras.map((t, i) => (
-        <li key={t.titulo} className={s.tira}
-          style={{ '--altura': `${ALTURA[i]}svh`, '--giro': `${GIRO[i]}deg` } as React.CSSProperties}>
-          <strong>{t.titulo}</strong>
-          <span aria-hidden="true">· · · · · · · · · · · ·</span>
-          <span>{t.local}, MA</span>
-          {t.l ? (
-            <>
-              <span>Agora: {t.l.agora}</span>
-              <span>{frase(t.l)}</span>
-              <span>Nasceu às {t.l.nascer}</span>
-              <span>Põe-se às {t.l.por}</span>
-            </>
-          ) : (
-            <>
-              <span>Sol de cerca de 12 horas</span>
-              <span>todos os dias do ano</span>
-            </>
-          )}
-        </li>
-      ))}
-      <li className={s.tira} style={{ '--altura': `${ALTURA[4]}svh`, '--giro': `${GIRO[4]}deg` } as React.CSSProperties}>
-        <strong>Meio-dia solar</strong>
-        <span aria-hidden="true">· · · · · · · · · · · ·</span>
-        <span>Pindaré-Mirim, hoje</span>
-        {pindare ? (
-          <>
-            <span>Sol mais alto às {pindare.meio}</span>
-            <span>Quase a pino: estamos</span>
-            <span>a 3,7° do Equador</span>
-          </>
-        ) : (
-          <span>Perto das 11h50</span>
-        )}
-      </li>
-      <li className={s.tira} style={{ '--altura': `${ALTURA[5]}svh`, '--giro': `${GIRO[5]}deg` } as React.CSSProperties}>
-        <strong>BR-222</strong>
-        <span aria-hidden="true">· · · · · · · · · · · ·</span>
-        <span>Pindaré-Mirim</span>
-        <span>até Santa Inês</span>
-        <span>as quatro usinas</span>
-        <span>à beira da estrada</span>
+    <ul className={s.tiras} aria-label="O sol agora sobre as usinas">
+      {leituras.map((c) => {
+        const d = c.l ? destaque(c.l) : null
+        return (
+          <li key={c.nome} className={s.tira}>
+            <strong>{c.nome}, em {c.local.nome}</strong>
+            {c.l && d ? (
+              <>
+                <p className={s.grande}>{d.valor}<span>{d.legenda}, às {c.l.agora}</span></p>
+                <dl className={s.horas}>
+                  <div><dt>Nasceu</dt><dd>{c.l.nascer}</dd></div>
+                  <div><dt>Põe-se</dt><dd>{c.l.por}</dd></div>
+                </dl>
+              </>
+            ) : (
+              <p className={s.grande}>12 h<span>de sol por dia, o ano todo</span></p>
+            )}
+          </li>
+        )
+      })}
+      <li className={`${s.tira} ${s.tiraMeio}`}>
+        <strong>Meio-dia solar de hoje, em Pindaré-Mirim</strong>
+        <p className={s.grande}>{pindare ? pindare.meio : '11h50'}<span>o sol fica quase a pino, a 3,7° do Equador</span></p>
       </li>
     </ul>
   )

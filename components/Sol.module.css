@@ -1,42 +1,41 @@
 .tiras {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  align-items: end;
-  gap: 12px;
-  padding: 0 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--vao);
 }
 
 .tira {
-  height: var(--altura);
-  transform: rotate(var(--giro)) translateY(4px);
-  transform-origin: bottom center;
+  min-height: 300px;
+  padding: 24px;
+  border-radius: var(--raio);
   background: var(--papel);
   color: var(--tinta);
-  padding: 20px 18px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: var(--step-small);
-  line-height: 1.45;
+  justify-content: space-between;
+  gap: 32px;
   font-variant-numeric: tabular-nums;
-  transition: transform 0.3s var(--ease-out);
 }
-.tira:hover { transform: rotate(0deg) translateY(-6px); }
-.tira strong { font-size: var(--step-body); font-weight: 600; letter-spacing: -0.01em; }
-.tira span[aria-hidden] { color: var(--tinta-suave); letter-spacing: 0.1em; overflow: hidden; white-space: nowrap; }
+.tiraMeio { background: var(--limao); }
 
-@media (max-width: 760px) {
-  .tiras {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: 46vw;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding: 0 16px;
-  }
-  .tira { scroll-snap-align: start; height: calc(var(--altura) * 0.9); }
+.tira strong { display: block; max-width: 18ch; font-size: var(--step-lead); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+
+.grande {
+  display: grid;
+  gap: 10px;
+  font-size: var(--step-head);
+  hyphens: auto;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+.grande span { max-width: 24ch; font-size: var(--step-small); font-weight: 400; letter-spacing: 0; line-height: 1.4; }
+
+.horas { display: flex; gap: 24px; font-size: var(--step-body); }
+.horas dt { font-size: var(--step-small); color: var(--tinta-suave); }
+.horas dd { font-weight: 600; }
+
+@media (max-width: 900px) {
+  .tiras { grid-template-columns: 1fr; }
+  .tira { min-height: 0; }
 }

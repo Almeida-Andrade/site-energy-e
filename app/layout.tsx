@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export const viewport: Viewport = { themeColor: '#10132A' }
+export const viewport: Viewport = { themeColor: '#FFFFFF' }
 
 const LIGA_JS = "document.documentElement.classList.add('js')"
 

@@ -13,21 +13,27 @@ export const LOCAIS = {
   santaInes: { nome: 'Santa Inês', lat: -3.714, lon: -45.415 },
 } as const
 
-export const USINAS = [
-  { nome: 'Canis 1', local: LOCAIS.pindare },
-  { nome: 'Canis 2', local: LOCAIS.pindare },
-  { nome: 'Canis 3', local: LOCAIS.pindare },
+// As Canis 1, 2 e 3 são vizinhas: o sol sobre elas é o mesmo.
+export const CONJUNTOS = [
+  { nome: 'Canis 1, 2 e 3', local: LOCAIS.pindare },
   { nome: 'Canis 5', local: LOCAIS.santaInes },
 ]
 
-// Números de projeto (ART da obra). Só o porte; nada de operação ou dinheiro.
+// Números de projeto, conferidos na ART da obra e na contagem de painéis (2.160 por usina).
+// Só o porte; nada de operação ou dinheiro.
 export const NUMEROS = [
-  { inteiro: '4', decimal: '', legenda: 'usinas solares em operação', foto: 'canis123-obliqua' },
-  { inteiro: '6', decimal: ',0', legenda: 'MWp de potência instalada', foto: 'canis5-de-cima' },
-  { inteiro: '4', decimal: ',0', legenda: 'MW de conexão com a rede', foto: 'cabines' },
-  { inteiro: '8.640', decimal: '', legenda: 'painéis solares no projeto', foto: 'fileiras' },
-  { inteiro: '7', decimal: ',2', legenda: 'hectares de usinas, 1,8 por usina', foto: 'canis123-br222' },
+  { valor: '6,0', unidade: 'MWp', legenda: 'de potência instalada, 1,5 MWp em cada usina', foto: 'canis5-de-cima' },
+  { valor: '4,0', unidade: 'MW', legenda: 'de conexão com a rede, 1 MW por usina', foto: 'cabines' },
+  { valor: '8.640', unidade: '', legenda: 'painéis solares, 2.160 em cada usina', foto: 'fileiras' },
+  { valor: '7,2', unidade: 'ha', legenda: 'de terreno, 1,8 hectare por usina', foto: 'canis123-br222' },
 ] as const
+
+// O contato é o mesmo da EGI (decisão de 15/10/2026). A mensagem pronta avisa de onde a conversa veio.
+export const CONTATO = {
+  whatsapp: '(98) 98481-2793',
+  whatsappUrl: `https://wa.me/5598984812793?text=${encodeURIComponent('Olá! Vim pelo site da Energy-E.')}`,
+  email: 'egiempreendimentos@grupoaandrade.com.br',
+}
 
 export const GRUPO = {
   nome: 'Grupo Almeida Andrade',

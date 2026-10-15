@@ -5,7 +5,10 @@
   --ciano: #00AEEF;
   --limao: #A6CE39;
 
-  --noite: #10132A;        /* chão da primeira tela */
+  --noite: #10132A;        /* chão dos números e do rodapé */
+  --noite-2: #1A1E3C;      /* quadros sobre a noite */
+  --noite-3: #252A55;      /* quadro sob o mouse */
+  --papel-fosco: #C9CCDA;  /* texto secundário sobre a noite */
   --tinta: #161A30;
   --tinta-suave: #4B4F63;
   --papel: #FFFFFF;
