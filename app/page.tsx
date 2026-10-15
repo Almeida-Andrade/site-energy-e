@@ -32,12 +32,13 @@ const FOTOS = {
 
 const NUMEROS_COM_FOTO: Numero[] = NUMEROS.map((n) => ({ ...n, ...FOTOS[n.foto] }))
 
-// Pastas da primeira tela: cada uma leva à sua seção. A da frente é a aberta.
+// Pastas da primeira tela, penduradas sob a pasta aberta e na ordem da página:
+// a primeira logo abaixo da aberta, a última no fundo. Cada uma leva à sua seção.
 const PASTAS = [
-  { rotulo: 'O sol agora', href: '#sol', cor: 'var(--noite)', tinta: 'var(--papel)', aba: '62%' },
-  { rotulo: 'A obra', href: '#obra', cor: 'var(--limao)', tinta: 'var(--tinta)', aba: '44%' },
-  { rotulo: 'As usinas', href: '#usinas', cor: 'var(--ciano)', tinta: 'var(--tinta)', aba: '26%' },
   { rotulo: 'Em números', href: '#numeros', cor: 'var(--verde)', tinta: 'var(--tinta)', aba: '8%' },
+  { rotulo: 'As usinas', href: '#usinas', cor: 'var(--ciano)', tinta: 'var(--tinta)', aba: '26%' },
+  { rotulo: 'A obra', href: '#obra', cor: 'var(--limao)', tinta: 'var(--tinta)', aba: '44%' },
+  { rotulo: 'O sol agora', href: '#sol', cor: 'var(--noite)', tinta: 'var(--papel)', aba: '62%' },
 ]
 
 const USINAS_PASTAS = [
@@ -122,7 +123,7 @@ export default function Pagina() {
               <span className={s.aba}>{p.rotulo}</span>
             </a>
           ))}
-          <div className={`${s.pasta} ${s.pastaAberta}`} style={{ '--i': PASTAS.length, '--aba': '80%' } as React.CSSProperties}>
+          <div className={`${s.pasta} ${s.pastaAberta}`}>
             <span className={s.aba}>Canis 5, Santa Inês</span>
             <a href="#usinas" className={s.botao}>Conhecer as usinas</a>
             <Image src={canis5DeCima} alt="A usina Canis 5 vista de cima, com as fileiras de painéis na diagonal"

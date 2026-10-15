@@ -41,30 +41,37 @@
   text-wrap: balance;
 }
 
+/* A pilha invertida: a pasta aberta (Canis 5, com o botão) fica em cima, e as outras pendem
+   por baixo dela com a aba virada para baixo, na ordem da página. */
 .pastas {
+  --passo: 48px;
+  --aba-h: 40px;
+  --aberta: 70svh;
   position: relative;
   width: min(100%, 1240px);
   margin-top: 48px;
-  height: calc(4 * 48px + 40px + 70svh);
+  height: calc(var(--aba-h) + var(--aberta) + 4 * var(--passo) + var(--aba-h));
 }
 
 .pasta {
   position: absolute;
   inset-inline: 0;
-  top: calc(var(--i) * 48px + 40px);
-  bottom: 0;
+  top: var(--aba-h);
+  height: calc(var(--aberta) + (var(--i) + 1) * var(--passo));
+  z-index: calc(9 - var(--i));
   background: var(--cor);
   color: var(--tinta-pasta);
-  border-radius: 0 var(--raio) 0 0;
+  border-radius: 0 0 var(--raio) 0;
   transition: transform 0.25s var(--ease-out);
 }
-a.pasta:hover { transform: translateY(-8px); }
+a.pasta:hover { transform: translateY(8px); }
 
+/* Nas pastas de baixo a aba sai pela borda de baixo, como uma pasta virada */
 .aba {
   position: absolute;
-  top: -40px;
+  bottom: calc(-1 * var(--aba-h));
   left: var(--aba);
-  height: 40px;
+  height: var(--aba-h);
   padding: 0 32px;
   display: flex;
   align-items: center;
@@ -73,16 +80,26 @@ a.pasta:hover { transform: translateY(-8px); }
   font-size: var(--step-body);
   font-weight: 500;
   white-space: nowrap;
-  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 16px 100%);
 }
 
 .junto { white-space: nowrap; }
 
-.pastaAberta .aba { left: auto; right: 0; }
+/* A aberta é a de cima: aba para cima, à direita, e altura própria */
+.pastaAberta .aba {
+  top: calc(-1 * var(--aba-h));
+  bottom: auto;
+  left: auto;
+  right: 0;
+  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
+}
 
 .pastaAberta {
   --cor: var(--marinho);
   --tinta-pasta: var(--papel);
+  height: var(--aberta);
+  z-index: 10;
+  border-radius: 0 0 var(--raio) var(--raio);
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -351,9 +368,8 @@ a.pasta:hover { transform: translateY(-8px); }
   .topo { justify-content: space-between; margin-inline: -14px; width: calc(100% + 28px); }
   .titulo { margin-top: 40px; }
   .apoio { font-size: var(--step-body); }
-  .pastas { width: 100%; margin-top: 40px; height: calc(4 * 44px + 32px + 64svh); }
-  .pasta { top: calc(var(--i) * 44px + 32px); }
-  .aba { top: -32px; height: 32px; font-size: var(--step-small); padding: 0 22px; }
+  .pastas { --passo: 44px; --aba-h: 32px; --aberta: 64svh; width: 100%; margin-top: 40px; }
+  .aba { font-size: var(--step-small); padding: 0 22px; }
   .pastaAberta { padding: 20px; }
   .botao { width: 100%; justify-content: center; }
   .capaFoto { top: 92px !important; height: calc(100% - 92px) !important; }
