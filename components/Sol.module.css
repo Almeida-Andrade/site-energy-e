@@ -1,0 +1,42 @@
+.tiras {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: end;
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.tira {
+  height: var(--altura);
+  transform: rotate(var(--giro)) translateY(4px);
+  transform-origin: bottom center;
+  background: var(--papel);
+  color: var(--tinta);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--step-small);
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.3s var(--ease-out);
+}
+.tira:hover { transform: rotate(0deg) translateY(-6px); }
+.tira strong { font-size: var(--step-body); font-weight: 600; letter-spacing: -0.01em; }
+.tira span[aria-hidden] { color: var(--tinta-suave); letter-spacing: 0.1em; overflow: hidden; white-space: nowrap; }
+
+@media (max-width: 760px) {
+  .tiras {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 46vw;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0 16px;
+  }
+  .tira { scroll-snap-align: start; height: calc(var(--altura) * 0.9); }
+}

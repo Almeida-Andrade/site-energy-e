@@ -1,0 +1,27 @@
+:root {
+  /* Medidas do logo oficial da Energy-E: o verde da palavra, o azul-marinho do "e" e as células do globo */
+  --verde: #00A650;
+  --marinho: #2E3092;
+  --ciano: #00AEEF;
+  --limao: #A6CE39;
+
+  --noite: #10132A;        /* chão da primeira tela */
+  --tinta: #161A30;
+  --tinta-suave: #4B4F63;
+  --papel: #FFFFFF;
+  --papel-2: #E9EBE3;
+  --chao: #F4F5EF;
+  --marinho-claro: #3D40A8; /* marinho ao passar o mouse */
+
+  --raio: 4px;
+  --vao: 8px;
+  --margem: clamp(16px, 3vw, 32px);
+
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-nome: clamp(4rem, 10vw, 10rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

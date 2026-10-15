@@ -1,0 +1,88 @@
+.linha { display: grid; gap: 24px; }
+
+.topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 var(--margem);
+}
+
+.titulo {
+  font-size: var(--step-head);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.botoes { display: flex; gap: 8px; }
+.botoes button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--tinta);
+  color: var(--papel);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.15s var(--ease-out);
+}
+.botoes button:hover { background: var(--marinho); }
+.botoes button:active { transform: scale(0.94); }
+.botoes button:disabled { opacity: 0.3; cursor: default; transform: none; }
+.botoes svg { width: 22px; height: 22px; }
+
+.barra {
+  height: 6px;
+  margin: 0 var(--margem);
+  background: var(--papel-2);
+  overflow: hidden;
+}
+.barra span {
+  display: block;
+  height: 100%;
+  background: var(--tinta);
+  transform-origin: left;
+  transition: transform 0.2s linear;
+}
+
+.fila {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--margem);
+  padding: 8px var(--margem) 24px;
+  scrollbar-width: none;
+}
+.fila::-webkit-scrollbar { display: none; }
+
+.momento {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+}
+.momento strong { font-size: var(--step-lead); font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+.momento p { margin-top: 8px; font-size: var(--step-body); color: var(--tinta-suave); line-height: 1.45; }
+
+.respiro { flex: none; }
+
+.foto {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--papel-2);
+}
+.foto img { object-fit: cover; transition: transform 0.6s var(--ease-out); }
+.momento:hover .foto img { transform: scale(1.04); }
+
+@media (max-width: 760px) {
+  .botoes { display: none; }
+  .fila { gap: 16px; }
+  .momento { flex-basis: 72vw; }
+  .respiro { height: auto !important; min-height: 32px; }
+  .momento:nth-child(odd) .respiro { min-height: 56px; }
+}
